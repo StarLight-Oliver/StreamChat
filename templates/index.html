@@ -1,0 +1,85 @@
+<html>
+    <body>     
+        <div id="a"></div>
+
+
+        <style>
+            body {
+              background-color: black;
+              font-size: 32px;
+              font-family: 'Trebuchet MS'
+            }
+
+            .textMessages {
+                margin:8px;
+                padding: 16px;
+                border-radius: 16px;
+                word-wrap: break-word;
+                background-color: #9147FF;
+                color: #ffffff;
+            }
+
+            .timeStamp {
+                color: #a0a0a0;
+                font-size: 24px;
+            }
+
+            .name {
+                font-size: 32px;
+            }
+
+        </style>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+            function renderResponse(json) {
+                let body = document.getElementById('a')
+                let oldHTML = body.tex
+                for (messageType in json) {
+                    for (message of json[messageType]) {
+                        var mainDiv = document.createElement("div")
+                        mainDiv.classList.add("textMessages")
+                        //word-wrap:break-word; display:inline-block;
+
+                        var time = document.createElement("div")
+                        time.classList.add("timeStamp")
+                        time.innerText = `${message.TimeStamp} - ${messageType}`
+
+                        var name = document.createElement("div")
+                        name.classList.add("name")
+                        name.innerText = `${message.Author}: ${message.Message}`
+
+                        mainDiv.appendChild(time)
+                        mainDiv.appendChild(name)
+
+                        //mainDiv.innerText =  message.TimeStamp + " - " + message.Author + ": " + message.Message
+                        body.appendChild(mainDiv)
+                    }
+                }
+                window.scrollTo({ 
+                    left: 0,
+                    top:document.body.scrollHeight,
+                    behavior: "smooth",
+                });
+            }
+
+            function sync() {
+                $.ajax({
+                    url: "/fetch",
+                    type: "GET",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function (json) {
+
+                        renderResponse(json)
+                    },
+                    error: function (res) { console.log(res) }
+                })
+            }
+
+            setInterval(sync, 1000 * 2);
+        </script>
+        
+    
+    </body>
+</html>
