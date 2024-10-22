@@ -15,30 +15,30 @@ app.debug = True
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+	return render_template("index.html")
 
 @app.route("/fetch", methods=["GET"])
 def FetchMessages():
 
-    messages = {}
-    for intergration in intergrations:
-        name = intergration.Name()
-        messageArray = intergration.FetchMessages(intergration)
-        messages[name] = messageArray
-    messageJson = jsonify(messages)
+	messages = {}
+	for intergration in intergrations:
+		name = intergration.Name()
+		messageArray = intergration.FetchMessages(intergration)
+		messages[name] = messageArray
+	messageJson = jsonify(messages)
 
-    #messageJson.headers.add("Access-Control-Allow-Origin", "*")
-    #messageJson.headers.add("Access-Control-Allow-Headers", "*")
-    #messageJson.headers.add("Access-Control-Allow-Methods", "*")
-    return messageJson
+	#messageJson.headers.add("Access-Control-Allow-Origin", "*")
+	#messageJson.headers.add("Access-Control-Allow-Headers", "*")
+	#messageJson.headers.add("Access-Control-Allow-Methods", "*")
+	return messageJson
 
 if __name__ == "__main__":
 
-    for intergration in intergrations:
-        thread = intergration.Setup()
+	for intergration in intergrations:
+		thread = intergration.Setup()
 
-        if thread != None:
-            threads.append(thread)
-            thread.start()
+		if thread != None:
+			threads.append(thread)
+			thread.start()
 
-    app.run(host= "0.0.0.0", port="5001")
+	app.run(host= "0.0.0.0", port="5001")
